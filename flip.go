@@ -2,8 +2,9 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
-	"os"
+	"strings"
 )
 
 func main() {
@@ -74,9 +75,27 @@ func main() {
 		"q":      "b",
 	}
 
+	tablePtr := flag.Bool("table", false, "")
+	putbackPtr := flag.Bool("putback", false, "")
+	flag.Parse()
+
+	if *putbackPtr {
+		if *tablePtr {
+			fmt.Println("┬─┬ ノ( ゜-゜ノ)")
+		} else {
+			fmt.Printf("%s ノ( ゜-゜ノ)\n", strings.Join(flag.Args(), " "))
+		}
+		return
+	}
+
+	if *tablePtr {
+		fmt.Println("(╯°□°)╯︵ ┻━┻ ")
+		return
+	}
+
 	// fmt.Printf("%s -> %s", "\u0021", flips["\u0021"])
 	buffer := bytes.Buffer{}
-	for _, arg := range os.Args[1:] {
+	for _, arg := range flag.Args() {
 		for _, ch := range arg {
 			str := flips[string(ch)]
 			if str == "" {
